@@ -1,0 +1,25 @@
+{
+  "name": "f-lazyload",
+  "version": "0.0.1",
+  "description": "lazyload img",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifir/f-lazyload.git"
+  },
+  "keywords": [
+    "lazy",
+    "lazyload",
+    "loading",
+    "javascript"
+  ],
+  "author": "ifir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ifir/f-lazyload/issues"
+  },
+  "homepage": "https://github.com/ifir/f-lazyload#readme"
+}
