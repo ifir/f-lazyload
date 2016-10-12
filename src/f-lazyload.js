@@ -35,8 +35,6 @@
 
 		//_this.lazyload();
 		_this.addEvents(_this);
-
-		_this.removeEvents();
 		//_this.eles.srcset = _this.eles.getAttribute(_this.srcset);
 	}
 
@@ -47,7 +45,11 @@
 		//初始化
 		init: function(opts){
 			var _this = this;
-
+			for(var i = 0; i < this.length; i++){
+				var cls = this.eles[i].className;
+				cls === '' ? 'loader' : cls+=' loader';
+				this.eles[i].className = cls;
+			}
 			_this.preload && _this.onread(_this);
 		},
 		//是否在可视区域
@@ -61,25 +63,47 @@
 		},
 		//首次打开页面执行懒加载
 		onread: function(_this){
+			var isload = false, remove = false;
 			for(var i = 0; i < _this.length; i++){
 				if(_this.isVisible(_this.eles[i])){
 					_this.lazyload(_this.eles[i]);
+					isload = true;
 				}
+			}
+			if(isload){
+				console.log('isload')
+				_this.eles = document.querySelectorAll(_this.tag+'['+_this.src+']');
+				_this.length = _this.eles.length;
+				isload = false;
+			}
+			//没有需要懒加载的图片则移除事件绑定
+			if(_this.length <= 0 && !remove){
+				_this.removeEvents(_this);
+				remove = true;
 			}
 		},
 		//懒加载
 		lazyload: function(ele){
+			var dataSrc = this.src;
+			var src = ele.getAttribute(dataSrc);
 			var img = new Image();
-			var src = ele.getAttribute(this.src);
+			//console.log('1====='+src)
+			img.src = src;
 			//图片加载完成
 			img.addEventListener('load', function(){
-				ele.setAttribute('src', src);
+				ele.src = src;
+				ele.setAttribute(dataSrc, '');
+				ele.className.replace(/loader/g, ' ');
+				//el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 
+				//delete ele.dataset.src
+				//console.log('2====='+src)
+				//ele.removeAttribute(dataSrc);
+				//console.log('3====='+src)
 			}, false);
 			//图片加载失败
 			img.addEventListener('error', function(){
-				console.log('error');
+				//console.log('error');
 			}, false);
-			img.src = src;
 		},
 		addEvents: function(_this){
 			window.addEventListener('scroll', function(){
@@ -87,8 +111,10 @@
 			}, false);
 		},
 		//移除事件绑定
-		removeEvents: function(){
-
+		removeEvents: function(_this){
+			window.removeEventListener('scroll', function(){
+				_this.onread(_this);
+			}, false);
 		}
 	}
 
