@@ -1,8 +1,8 @@
 {
   "name": "f-lazyload",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "lazyload img",
-  "main": "dist/f-lazyload.min.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

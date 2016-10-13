@@ -1,5 +1,5 @@
 /*!
- * f-lazyload v0.0.1
+ * f-lazyload v0.0.3
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
@@ -13,6 +13,7 @@
 		global.Flazyload = factory();
 	}
 })(typeof window !== 'undefined' ? window : this, function(){
+	'use strict';
 	function Flazyload(opts){
 		opts = arguments.length > 0 ? opts : {};
 		var _this = this;
@@ -31,6 +32,13 @@
 		_this.winW = window.innerWidth;
         _this.winH = window.innerHeight;
 
+        //loading 图片
+        _this.loadimg = opts.loadimg || false;
+
+        //error 图片
+        
+        _this.errimg = opts.errimg || false;
+
 		_this.init(opts);
 
 		//_this.lazyload();
@@ -45,11 +53,11 @@
 		//初始化
 		init: function(opts){
 			var _this = this;
-			// for(var i = 0; i < this.length; i++){
-			// 	var cls = this.eles[i].className;
-			// 	cls === '' ? 'loader' : cls+=' loader';
-			// 	this.eles[i].className = cls;
-			// }
+			if(_this.loadimg){
+				for(var i = 0; i < this.length; i++){
+					_this.eles[i].setAttribute('src', _this.loadimg);
+				}
+			}
 			_this.preload && _this.onread(_this);
 		},
 		//是否在可视区域

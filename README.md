@@ -1,5 +1,5 @@
 # f-lazyload
-一个懒加载库，无依赖
+原生无依赖，懒加载插件
 兼容IE8(不包括IE8)以上
 
 ```
@@ -40,7 +40,7 @@ var Flazyload = new Flazyload();
 
 ```
 var Flazyload = require('f-lazyload');
-new Flazyload();
+var lazyload = new Flazyload();
 ```
 
 
