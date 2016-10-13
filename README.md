@@ -32,7 +32,7 @@
 
 var Flazyload = new Flazyload();
 ```
-###or:###
+###or:
 
 2、npm安装
 

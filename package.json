@@ -2,7 +2,7 @@
   "name": "f-lazyload",
   "version": "0.0.1",
   "description": "lazyload img",
-  "main": "index.js",
+  "main": "dist/f-lazyload.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
