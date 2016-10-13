@@ -34,12 +34,12 @@
 		_this.preload = opts.proload || true;
 		//屏幕可视宽和高
 		_this.winW = window.innerWidth;
-        _this.winH = window.innerHeight;
+		_this.winH = window.innerHeight;
 
-        //loading 图片
-        _this.loadimg = opts.loadimg || false;
-        //error 图片
-        _this.errimg = opts.errimg || false;
+		//loading 图片
+		_this.loadimg = opts.loadimg || false;
+		//error 图片
+		_this.errimg = opts.errimg || false;
 
 		_this.init(opts);
 
@@ -67,10 +67,10 @@
 		isVisible: function(ele){
 			var rect = ele.getBoundingClientRect();
 			var eTop = rect.top;
-	        var eLeft = rect.left;
-	        var eWidth = rect.width;
-	        var eHeight = rect.height;
-	        return eTop < this.winH && eTop + eHeight >= 0 && eLeft < this.winW && eLeft + eWidth >= 0;
+			var eLeft = rect.left;
+			var eWidth = rect.width;
+			var eHeight = rect.height;
+			return eTop < this.winH && eTop + eHeight >= 0 && eLeft < this.winW && eLeft + eWidth >= 0;
 		},
 		//需要执行的懒加载
 		onread: function(_this){
@@ -118,7 +118,6 @@
 					ele.removeAttribute(dataSrc);
 					//ele.setAttribute('alt', '图片加载失败');
 				}
-				var timer = null;
 			}, false);
 			//发起请求
 			src !== '' && (img.src = src);
@@ -136,10 +135,6 @@
 			}, false);
 		}
 	}
-
-
-
-
 
 	return Flazyload;
 })
