@@ -1,5 +1,5 @@
 /*!
- * f-lazyload v0.0.1
+ * f-lazyload v0.0.3
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
@@ -13,6 +13,7 @@
 		global.Flazyload = factory();
 	}
 })(typeof window !== 'undefined' ? window : this, function(){
+	'use strict';
 	function Flazyload(opts){
 		opts = arguments.length > 0 ? opts : {};
 		var _this = this;
@@ -33,14 +34,11 @@
 
         //loading 图片
         _this.loadimg = opts.loadimg || false;
-
         //error 图片
-        
         _this.errimg = opts.errimg || false;
 
 		_this.init(opts);
 
-		//_this.lazyload();
 		_this.addEvents(_this);
 		//_this.eles.srcset = _this.eles.getAttribute(_this.srcset);
 	}
@@ -52,6 +50,7 @@
 		//初始化
 		init: function(opts){
 			var _this = this;
+			//设置loading图片
 			if(_this.loadimg){
 				for(var i = 0; i < this.length; i++){
 					_this.eles[i].setAttribute('src', _this.loadimg);
@@ -73,7 +72,7 @@
 			var isload = false, remove = false;
 			for(var i = 0; i < _this.length; i++){
 				if(_this.isVisible(_this.eles[i])){
-					_this.lazyload(_this.eles[i]);
+					_this.lazyload(_this.eles[i], _this);
 					isload = true;
 				}
 			}
@@ -89,30 +88,29 @@
 			}
 		},
 		//懒加载
-		lazyload: function(ele){
-			var dataSrc = this.src;
+		lazyload: function(ele, _this){
+			var dataSrc = _this.src;
 			var src = ele.getAttribute(dataSrc) || '';
 			var img = new Image();
-			//console.log('1====='+src)
-			//console.log(img.complete)
-			
 			//图片加载完成
 			img.addEventListener('load', function(){
 				ele.src = src;
 				ele.setAttribute(dataSrc, '');
 				ele.removeAttribute(dataSrc);
-				//el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 
-				//delete ele.dataset.src
-				//console.log('2====='+src)
-				//ele.removeAttribute(dataSrc);
-				//console.log('3====='+src)
 			}, false);
 			//图片加载失败
 			img.addEventListener('error', function(){
-				//console.log('error');
+				//设置图片加载失败图片
+				var timer = null;
+				clearTimeout(timer);
+				timer = setTimeout(function(){
+					_this.errimg && ele.setAttribute('src', _this.errimg);
+					ele.removeAttribute(dataSrc);
+					clearTimeout(timer);
+				},2000);
 			}, false);
 			//发起请求
-			img.src = src;
+			src !== '' && (img.src = src);
 		},
 		addEvents: function(_this){
 			window.addEventListener('scroll', function(){

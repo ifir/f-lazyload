@@ -39,12 +39,18 @@ gulp.task('js', function(){
 		.pipe(changed(jsPath))
 		.pipe(plumber())
 		.pipe(gulp.dest('./dist'))
+		.pipe(reload({
+			stream: true
+		}))
 });
 gulp.task('html', function(){
 	return gulp.src(htmlPath)
 		.pipe(changed(htmlPath))
 		.pipe(plumber())
 		.pipe(gulp.dest('./dist'))
+		.pipe(reload({
+			stream: true
+		}))
 });
 gulp.task('min:js', function(){
 	return gulp.src(jsPath)
