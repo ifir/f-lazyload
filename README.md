@@ -29,8 +29,15 @@
 1、页面引入
 ```
 <script src="youpath/f-lazload.js"></script>
-
-var Flazyload = new Flazyload();
+<script>
+	var Flazyload = new Flazyload({
+		container:String, //指定父容器 默认body,
+		loadimg:String, //加载中图片 默认无图片
+		errimg:String, //加载失败图片 默认无图片
+		tag:String, //指定需要加载元素标签名称,默认img,如果全部懒加载的元素都是一种类型,最好指定一下类型
+		mix:Boolean, //混杂模式,如果需要加载的元素包含img,canvas,div等则开启mix,默认false,开启混杂模式则不需要指定tag类型
+	});
+</script>
 ```
 ###or:
 
@@ -40,7 +47,13 @@ var Flazyload = new Flazyload();
 
 ```
 var Flazyload = require('f-lazyload');
-var lazyload = new Flazyload();
+var lazyload = new Flazyload({
+	container:String, //指定父容器 默认body,
+	loadimg:String, //加载中图片 默认无图片
+	errimg:String, //加载失败图片 默认无图片
+	tag:String, //指定需要加载元素标签名称,默认img,如果全部懒加载的元素都是一种类型,最好指定一下类型
+	mix:Boolean, //混杂模式,如果需要加载的元素包含img,canvas,div等则开启mix,默认false,开启混杂模式则不需要指定tag类型
+});
 ```
 
 
