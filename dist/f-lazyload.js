@@ -24,6 +24,8 @@
 		_this.src = opts.sign || 'data-src';
 		//srcset属性
 		_this.srcset = 'data-srcset';
+		//是否开启混杂模式（例如需要懒加载的元素有img,canvas,div等元素）
+		_this.mix = opts.mix || false;
 		//默认img标签
 		_this.tag = opts.tag ||'img';
 		//获取需要懒加载的dom
@@ -57,7 +59,18 @@
 			//设置loading图片
 			if(_this.loadimg){
 				for(var i = 0; i < _this.length; i++){
-					_this.eles[i].setAttribute('src', _this.loadimg);
+					var curEle = _this.eles[i];
+					if(!_this.mix){
+						if(_this.tag === 'img'){
+							//img标签
+							curEle.setAttribute('src', _this.loadimg);
+						}else{
+							//除img标签以外的
+							_this.background(curEle, _this.loadimg);
+						}
+					}else{
+
+					}
 				}
 			}
 			//首次载入页面是否判断懒加载元素是否在可视区域内
@@ -92,16 +105,33 @@
 				remove = true;
 			}
 		},
+		attrSrc: function(ele, attr, url){
+			ele.setAttribute(attr, url);
+			ele.removeAttribute(this.src);
+		},
+		background: function(ele, url){
+			ele.style.backgroundImage = 'url('+url+')';
+			ele.style.backgroundPosition = 'center center';
+			ele.style.backgroundSize = 'contain';
+			ele.style.backgroundRepeat = 'no-repeat';
+		},
 		//懒加载
 		lazyload: function(ele, _this){
 			var dataSrc = _this.src;
 			var src = ele.getAttribute(dataSrc) || '';
+			if(src === '') return;
 			var img = new Image();
 			//图片加载完成
 			img.addEventListener('load', function(){
-				ele.src = src;
-				ele.setAttribute(dataSrc, '');
-				ele.removeAttribute(dataSrc);
+				switch(_this.tag){
+					case 'img' :
+						_this.attrSrc(ele, 'src', src);
+						break;
+					case 'canvas' :
+						break
+					default:
+						_this.background(ele, src);
+				}
 			}, false);
 			//图片加载失败
 			img.addEventListener('error', function(){
@@ -110,8 +140,14 @@
 					var timer = null;
 					clearTimeout(timer);
 					timer = setTimeout(function(){
-						ele.setAttribute('src', _this.errimg);
-						ele.removeAttribute(dataSrc);
+						if(_this.tag === 'img'){
+							//img标签
+							_this.attrSrc(ele, 'src', _this.errimg);
+						}else{
+							//除img标签以外的
+							_this.background(ele, _this.errimg);
+							ele.removeAttribute(_this.src);
+						}
 						clearTimeout(timer);
 					},2000);
 				}else{
@@ -120,7 +156,7 @@
 				}
 			}, false);
 			//发起请求
-			src !== '' && (img.src = src);
+			img.src = src;
 		},
 		//绑定事件
 		addEvents: function(_this){
