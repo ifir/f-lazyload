@@ -53,14 +53,14 @@
 		_this.errimg = false;
 		//覆盖配置
 		for (var key in opts) {
-            if(typeof opts[key] === 'object' && Object.prototype.toString.call(opts[key]).toLowerCase() === '[object object]'){
-            	for(var val in opts[key]){
-            		_this[key][val] = opts[key][val];
-            	}
-            }else{
-            	_this[key] = opts[key];
-            }
-        }
+			if(typeof opts[key] === 'object' && Object.prototype.toString.call(opts[key]).toLowerCase() === '[object object]'){
+				for(var val in opts[key]){
+					_this[key][val] = opts[key][val];
+				}
+			}else{
+				_this[key] = opts[key];
+			}
+		}
 
 		//获取需要懒加载的dom
 		if(_this.mix){
