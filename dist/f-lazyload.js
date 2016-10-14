@@ -1,5 +1,5 @@
 /*!
- * f-lazyload v0.0.3
+ * f-lazyload v0.0.4
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
@@ -19,33 +19,56 @@
 		opts = arguments.length > 0 ? opts : {};
 		var _this = this;
 		//指定父容器
-		_this.container = opts.container || 'body';
+		_this.container = 'body';
 		//默认添加data-src属性开启懒加载
-		_this.src = opts.sign || 'data-src';
+		_this.src = 'data-src';
 		//srcset属性
 		_this.srcset = 'data-srcset';
 		//是否开启混杂模式（例如需要懒加载的元素有img,canvas,div等元素）
-		_this.mix = opts.mix || false;
+		_this.mix = false;
 		//默认img标签
-		_this.tag = opts.tag ||'img';
-		if(_this.mix){
-			//获取需要懒加载的dom
-			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
-		}else{
-			//获取需要懒加载的dom
-			_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
-		}
-		_this.length = _this.eles.length;
+		_this.tag = 'img';
+		//bgConfig
+		_this.bgConfig = {
+			bgSize : 'contain',
+			bgPos : 'center center'
+		};
+		//canvas config
+		_this.cvsConfig = {
+			width : 'auto',
+			height : 'auto',
+			cvsPos : [0, 0],
+			imgPos : [0, 0],
+			imgScale : true
+		};
 		//是否在页面首次载入就判断是否有需要懒加载的图片在可视区域
-		_this.preload = opts.proload || true;
+		_this.preload = true;
 		//屏幕可视宽和高
 		_this.winW = window.innerWidth;
 		_this.winH = window.innerHeight;
 
 		//loading 图片
-		_this.loadimg = opts.loadimg || false;
+		_this.loadimg = false;
 		//error 图片
-		_this.errimg = opts.errimg || false;
+		_this.errimg = false;
+		//覆盖配置
+		for (var key in opts) {
+            if(typeof opts[key] === 'object' && Object.prototype.toString.call(opts[key]).toLowerCase() === '[object object]'){
+            	for(var val in opts[key]){
+            		_this[key][val] = opts[key][val];
+            	}
+            }else{
+            	_this[key] = opts[key];
+            }
+        }
+
+		//获取需要懒加载的dom
+		if(_this.mix){
+			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
+		}else{
+			_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
+		}
+		_this.length = _this.eles.length;
 
 		_this.init(opts);
 
@@ -112,8 +135,8 @@
 		},
 		background: function(ele, url){
 			ele.style.backgroundImage = 'url('+url+')';
-			ele.style.backgroundPosition = 'center center';
-			ele.style.backgroundSize = 'contain';
+			ele.style.backgroundPosition = this.bgConfig.bgPos;
+			ele.style.backgroundSize = this.bgConfig.bgSize;
 			ele.style.backgroundRepeat = 'no-repeat';
 		},
 		//懒加载
@@ -130,7 +153,16 @@
 						_this.attrSrc(ele, 'src', src);
 						break;
 					case 'canvas' :
-						break
+						var cvs = ele.getContext('2d');
+						// if(cvs.width || cvs.height){
+
+						// }else{
+
+						// }
+						cvs.drawImage(this, 0, 0, 300, 300);
+						ele.removeAttribute(_this.src);
+						ele.style.backgroundImage = 'none';
+						break;
 					default:
 						_this.background(ele, src);
 						ele.removeAttribute(_this.src);
