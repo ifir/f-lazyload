@@ -28,9 +28,13 @@
 		_this.mix = opts.mix || false;
 		//默认img标签
 		_this.tag = opts.tag ||'img';
-		//获取需要懒加载的dom
-		//_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
-		_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
+		if(_this.mix){
+			//获取需要懒加载的dom
+			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
+		}else{
+			//获取需要懒加载的dom
+			_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
+		}
 		_this.length = _this.eles.length;
 		//是否在页面首次载入就判断是否有需要懒加载的图片在可视区域
 		_this.preload = opts.proload || true;
@@ -60,16 +64,13 @@
 			if(_this.loadimg){
 				for(var i = 0; i < _this.length; i++){
 					var curEle = _this.eles[i];
-					if(!_this.mix){
-						if(_this.tag === 'img'){
-							//img标签
-							curEle.setAttribute('src', _this.loadimg);
-						}else{
-							//除img标签以外的
-							_this.background(curEle, _this.loadimg);
-						}
+					var nodeName = _this.mix ? curEle.nodeName.toLowerCase() : _this.tag;
+					if(nodeName === 'img'){
+						//img标签
+						curEle.setAttribute('src', _this.loadimg);
 					}else{
-
+						//除img标签以外的
+						_this.background(curEle, _this.loadimg);
 					}
 				}
 			}
@@ -123,7 +124,8 @@
 			var img = new Image();
 			//图片加载完成
 			img.addEventListener('load', function(){
-				switch(_this.tag){
+				var nodeName = _this.mix ? ele.nodeName.toLowerCase() : _this.tag;
+				switch(nodeName){
 					case 'img' :
 						_this.attrSrc(ele, 'src', src);
 						break;
@@ -131,6 +133,7 @@
 						break
 					default:
 						_this.background(ele, src);
+						ele.removeAttribute(_this.src);
 				}
 			}, false);
 			//图片加载失败
@@ -140,7 +143,8 @@
 					var timer = null;
 					clearTimeout(timer);
 					timer = setTimeout(function(){
-						if(_this.tag === 'img'){
+						var nodeName = _this.mix ? ele.nodeName.toLowerCase() : _this.tag;
+						if(nodeName === 'img'){
 							//img标签
 							_this.attrSrc(ele, 'src', _this.errimg);
 						}else{
