@@ -45,8 +45,8 @@
 			bgPos: String //设置background-position 默认'center center'
 		},
 		cvsConfig:{ //canvas config
-			width:String,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
-			height:String,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
+			width:String || Number,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
+			height:String || Number,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
 			imgPos:Array,//img绘制的坐标位置，默认[0,0]
 			imgScale:Boolean //img是否进行缩放充满整个canvas，默认true
 		}
@@ -74,8 +74,8 @@ var lazyload = new Flazyload({
 		bgPos: String //设置background-position 默认'center center'
 	},
 	cvsConfig:{ //canvas config
-		width:Number,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
-		height:Number,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
+		width:String || Number,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
+		height:String || Number,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
 		imgPos:Array,//img绘制的坐标位置，默认[0,0]
 		imgScale:Boolean //img是否进行缩放充满整个canvas，默认true
 	}
