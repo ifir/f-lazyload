@@ -5,8 +5,8 @@
 ```
 实现的主要功能:
 1、支持img,canvas,div(能设置background-image属性)标签元素
-2、支持img设置dataset属性
-3、自定义加载完成动画
+2、支持img设置dataset属性(下个版本增加)
+3、自定义加载完成动画(下个版本增加)
 4、自定义loading图片和error图片
 5、支持预加载
 6、支持canvas 图像设置
@@ -34,6 +34,7 @@
 <script>
 	var Flazyload = new Flazyload({
 		container: String, //指定父容器 默认body,例如:'.class' or '#id' or 'tag'
+		src:String, // 自定义需要懒加载图片的标识,默认'data-src',格式为data-*
 		proload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
 		loadimg: String, //加载中图片 默认无图片
 		errimg: String, //加载失败图片 默认无图片
@@ -44,9 +45,8 @@
 			bgPos: String //设置background-position 默认'center center'
 		},
 		cvsConfig:{ //canvas config
-			width:Number,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
-			height:Number,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
-			cvsPos:Array, //canvas绘制的坐标位置，默认[0,0]
+			width:String,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
+			height:String,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
 			imgPos:Array,//img绘制的坐标位置，默认[0,0]
 			imgScale:Boolean //img是否进行缩放充满整个canvas，默认true
 		}
@@ -63,6 +63,7 @@
 var Flazyload = require('f-lazyload');
 var lazyload = new Flazyload({
 	container: String, //指定父容器 默认body,例如:'.class' or '#id' or 'tag'
+	src:String, // 自定义需要懒加载图片的标识,默认'data-src',格式为data-*
 	proload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
 	loadimg: String, //加载中图片 默认无图片
 	errimg: String, //加载失败图片 默认无图片
@@ -75,7 +76,6 @@ var lazyload = new Flazyload({
 	cvsConfig:{ //canvas config
 		width:Number,//如果所有的canvas的宽度都是固定则配置此选项，默认'auto'，无需再canvas标签上写width属性
 		height:Number,//如果所有的canvas的高度都是固定则配置此选项，默认'auto'，无需再canvas标签上写height属性
-		cvsPos:Array, //canvas绘制的坐标位置，默认[0,0]
 		imgPos:Array,//img绘制的坐标位置，默认[0,0]
 		imgScale:Boolean //img是否进行缩放充满整个canvas，默认true
 	}

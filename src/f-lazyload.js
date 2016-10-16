@@ -37,7 +37,6 @@
 		_this.cvsConfig = {
 			width : 'auto',
 			height : 'auto',
-			cvsPos : [0, 0],
 			imgPos : [0, 0],
 			imgScale : true
 		};
@@ -61,7 +60,7 @@
 				_this[key] = opts[key];
 			}
 		}
-
+		console.log(_this.cvsConfig)
 		//获取需要懒加载的dom
 		if(_this.mix){
 			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
@@ -154,12 +153,31 @@
 						break;
 					case 'canvas' :
 						var cvs = ele.getContext('2d');
-						// if(cvs.width || cvs.height){
-
-						// }else{
-
-						// }
-						cvs.drawImage(this, 0, 0, 300, 300);
+						var confW = _this.cvsConfig.width,
+							confH = _this.cvsConfig.height,
+							imgW, imgH;
+						//canvas width
+						if(_this.cvsConfig.width === 'auto' || (_this.cvsConfig.width === '')){
+							cvs.width ? (ele.width = cvs.width) : (ele.width = ele.getBoundingClientRect().width);
+						}else{
+							ele.width = _this.cvsConfig.width;
+						}
+						//canvas height
+						if(_this.cvsConfig.height === 'auto' || (_this.cvsConfig.height === '')){
+							cvs.height ? (ele.height = cvs.height) : (ele.height = ele.getBoundingClientRect().height);
+						}else{
+							ele.height = _this.cvsConfig.height;
+						}
+						//设置图片大小
+						if(_this.cvsConfig.imgScale){
+							imgW = ele.width;
+							imgH = ele.height;
+						}else{
+							imgW = this.width;
+							imgH = this.height;
+						}
+						//context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+						cvs.drawImage(this, _this.cvsConfig.imgPos[0], _this.cvsConfig.imgPos[1], imgW, imgH);
 						ele.removeAttribute(_this.src);
 						ele.style.backgroundImage = 'none';
 						break;
