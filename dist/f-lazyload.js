@@ -1,5 +1,5 @@
 /*!
- * f-lazyload v0.0.5
+ * f-lazyload v0.0.6
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */

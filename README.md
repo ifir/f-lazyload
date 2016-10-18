@@ -5,11 +5,11 @@
 ```
 实现的主要功能:
 1、支持img,canvas,div(能设置background-image属性)标签元素
-2、支持img设置dataset属性
+2、支持img设置srcset属性
 3、自定义加载完成动画(下个版本增加)
 4、自定义loading图片和error图片
 5、支持预加载
-6、支持canvas 图像设置
+6、自定义canvas 图像设置
 7、自定义background 设置
 ```
 
