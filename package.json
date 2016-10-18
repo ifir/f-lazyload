@@ -1,10 +1,11 @@
 {
   "name": "f-lazyload",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "lazyload img",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "gulp dev",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",

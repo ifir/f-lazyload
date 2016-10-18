@@ -1,5 +1,5 @@
 /*!
- * f-lazyload v0.0.4
+ * f-lazyload v0.0.5
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
@@ -60,7 +60,6 @@
 				_this[key] = opts[key];
 			}
 		}
-		console.log(_this.cvsConfig)
 		//获取需要懒加载的dom
 		if(_this.mix){
 			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
@@ -72,7 +71,6 @@
 		_this.init(opts);
 
 		_this.addEvents(_this);
-		//_this.eles.srcset = _this.eles.getAttribute(_this.srcset);
 	}
 
 
@@ -118,7 +116,11 @@
 				}
 			}
 			if(isload){
-				_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
+				if(_this.mix){
+					_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
+				}else{
+					_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
+				}
 				_this.length = _this.eles.length;
 				isload = false;
 			}
@@ -128,9 +130,13 @@
 				remove = true;
 			}
 		},
-		attrSrc: function(ele, attr, url){
-			ele.setAttribute(attr, url);
+		attrSrc: function(ele, url){
+			ele.setAttribute('src', url);
 			ele.removeAttribute(this.src);
+			if(ele.getAttribute(this.srcset)){
+				ele.setAttribute('srcset', ele.getAttribute(this.srcset));
+				ele.removeAttribute(this.srcset);
+			}
 		},
 		background: function(ele, url){
 			ele.style.backgroundImage = 'url('+url+')';
@@ -149,24 +155,28 @@
 				var nodeName = _this.mix ? ele.nodeName.toLowerCase() : _this.tag;
 				switch(nodeName){
 					case 'img' :
-						_this.attrSrc(ele, 'src', src);
+						_this.attrSrc(ele, src);
 						break;
 					case 'canvas' :
 						var cvs = ele.getContext('2d');
 						var confW = _this.cvsConfig.width,
 							confH = _this.cvsConfig.height,
 							imgW, imgH;
-						//canvas width
-						if(_this.cvsConfig.width === 'auto' || (_this.cvsConfig.width === '')){
-							cvs.width ? (ele.width = cvs.width) : (ele.width = ele.getBoundingClientRect().width);
+						if( (confW === 'auto'&& confH === 'auto') || (confW === 'inherit'&& confH === 'inherit') || (confW === ''&& confH === '') ){
+							ele.width = cvs.width ? cvs.width : ele.getBoundingClientRect().width;
+							ele.height = cvs.height ? cvs.height : ele.getBoundingClientRect().height;
 						}else{
-							ele.width = _this.cvsConfig.width;
-						}
-						//canvas height
-						if(_this.cvsConfig.height === 'auto' || (_this.cvsConfig.height === '')){
-							cvs.height ? (ele.height = cvs.height) : (ele.height = ele.getBoundingClientRect().height);
-						}else{
-							ele.height = _this.cvsConfig.height;
+							//计算width和height
+							if(confW === 'auto'){
+								ele.height = confH === 'inherit' ? ele.getBoundingClientRect().height : confH;
+								ele.width =  Math.floor((ele.height * this.width) / this.height);
+							}else if(confH === 'auto'){
+								ele.width = confW === 'inherit' ? ele.getBoundingClientRect().width :confW;
+								ele.height =  Math.floor((ele.width * this.height) / this.width);
+							}else{
+								ele.width = confW;
+								ele.height = confH;
+							}
 						}
 						//设置图片大小
 						if(_this.cvsConfig.imgScale){
@@ -196,7 +206,11 @@
 						var nodeName = _this.mix ? ele.nodeName.toLowerCase() : _this.tag;
 						if(nodeName === 'img'){
 							//img标签
-							_this.attrSrc(ele, 'src', _this.errimg);
+							_this.attrSrc(ele, _this.errimg);
+							if(ele.getAttribute('srcset')){
+								ele.removeAttribute(_this.srcset);
+								ele.removeAttribute('srcset');
+							}
 						}else{
 							//除img标签以外的
 							_this.background(ele, _this.errimg);
@@ -206,7 +220,10 @@
 					},2000);
 				}else{
 					ele.removeAttribute(dataSrc);
-					//ele.setAttribute('alt', '图片加载失败');
+					if(ele.getAttribute(this.srcset)){
+						ele.removeAttribute(_this.srcset);
+						ele.removeAttribute('srcset');
+					}
 				}
 			}, false);
 			//发起请求
