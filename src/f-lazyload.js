@@ -172,7 +172,6 @@
 				switch(nodeName){
 					case 'img' :
 						_this.attrSrc(ele, src);
-						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 						break;
 					case 'canvas' :
 						var cvs = ele.getContext('2d');
@@ -207,13 +206,12 @@
 						cvs.drawImage(this, _this.cvsConfig.imgPos[0], _this.cvsConfig.imgPos[1], imgW, imgH);
 						ele.removeAttribute(_this.src);
 						ele.style.backgroundImage = 'none';
-						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 						break;
 					default:
 						_this.background(ele, src);
 						ele.removeAttribute(_this.src);
-						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 				}
+				_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 			}, false);
 			//图片加载失败
 			img.addEventListener('error', function(){
