@@ -1,18 +1,19 @@
 /*!
- * f-lazyload v0.0.6
+ * f-lazyload v0.1.0
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
 ;(function(global, factory){
-	//AMD || CMD
-	if(typeof define === 'function' && define.amd === 'object' && define.amd){
-		define([], factory);
-	}else if(typeof module === "object" && typeof module.exports === "object" && module.exports){
-		module.exports = factory();
-	}else{
-		global.Flazyload = factory();
-	}
-})(typeof window !== 'undefined' ? window : this, function(){
+	if (typeof define === 'function' && define.amd) {
+        define(function () {
+            return (global.Flazyload = factory(global, global.document));
+        });
+    } else if (typeof exports === 'object') {
+        module.exports = factory(global, global.document);
+    } else {
+        global.Flazyload = factory(global, global.document);
+    }
+})(typeof window !== 'undefined' ? window : this, function (window, document) {
 	'use strict';
 
 	function Flazyload(opts){
@@ -40,6 +41,8 @@
 			imgPos : [0, 0],
 			imgScale : true
 		};
+		//动画速度
+		_this.fadeIn = false;
 		//是否在页面首次载入就判断是否有需要懒加载的图片在可视区域
 		_this.preload = true;
 		//屏幕可视宽和高
@@ -99,11 +102,11 @@
 		},
 		//是否在可视区域
 		isVisible: function(ele){
-			var rect = ele.getBoundingClientRect();
-			var eTop = rect.top;
-			var eLeft = rect.left;
-			var eWidth = rect.width;
-			var eHeight = rect.height;
+			var rect = ele.getBoundingClientRect(),
+				eTop = rect.top,
+				eLeft = rect.left,
+				eWidth = rect.width,
+				eHeight = rect.height;
 			return eTop < this.winH && eTop + eHeight >= 0 && eLeft < this.winW && eLeft + eWidth >= 0;
 		},
 		//需要执行的懒加载
@@ -144,6 +147,19 @@
 			ele.style.backgroundSize = this.bgConfig.bgSize;
 			ele.style.backgroundRepeat = 'no-repeat';
 		},
+		opacity: function(ele, speed){
+			ele.style.opacity = 0.2;
+			var timer = null;
+			var timeSpeed = speed / 30;
+			var value = 0.7 / 30;
+			var alpha = 0.3;
+			clearInterval(timer);
+			timer = setInterval(function(){
+			      alpha += value;
+			      ele.style.opacity = Math.min(1, alpha);
+			      alpha >= 1 && clearInterval(timer);
+			},timeSpeed);
+		},
 		//懒加载
 		lazyload: function(ele, _this){
 			var dataSrc = _this.src;
@@ -156,6 +172,7 @@
 				switch(nodeName){
 					case 'img' :
 						_this.attrSrc(ele, src);
+						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 						break;
 					case 'canvas' :
 						var cvs = ele.getContext('2d');
@@ -190,10 +207,12 @@
 						cvs.drawImage(this, _this.cvsConfig.imgPos[0], _this.cvsConfig.imgPos[1], imgW, imgH);
 						ele.removeAttribute(_this.src);
 						ele.style.backgroundImage = 'none';
+						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 						break;
 					default:
 						_this.background(ele, src);
 						ele.removeAttribute(_this.src);
+						_this.fadeIn && _this.opacity(ele, _this.fadeIn);
 				}
 			}, false);
 			//图片加载失败
