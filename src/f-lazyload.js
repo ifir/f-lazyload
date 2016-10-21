@@ -1,13 +1,13 @@
 /*!
- * f-lazyload v0.1.0
+ * f-lazyload v0.1.1
  * 原生无依赖, 实现图片懒加载
  * Repo: https://github.com/ifir/f-lazyload
  */
 ;(function(global, factory){
 	if (typeof define === 'function' && define.amd) {
-        define(function () {
-            return (global.Flazyload = factory(global, global.document));
-        });
+		define(function () {
+		    return (global.Flazyload = factory(global, global.document));
+		});
     } else if (typeof exports === 'object') {
         module.exports = factory(global, global.document);
     } else {
@@ -63,6 +63,8 @@
 				_this[key] = opts[key];
 			}
 		}
+		_this.remove = false;
+		_this.isload = false;
 		//获取需要懒加载的dom
 		if(_this.mix){
 			_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
@@ -73,9 +75,9 @@
 
 		_this.init(opts);
 
-		_this.addEvents(_this);
-	}
+		_this.addEvents();
 
+	}
 
 	Flazyload.prototype = {
 		//修正constructor
@@ -98,7 +100,7 @@
 				}
 			}
 			//首次载入页面是否判断懒加载元素是否在可视区域内
-			_this.preload && _this.onread(_this);
+			_this.preload && _this.onread();
 		},
 		//是否在可视区域
 		isVisible: function(ele){
@@ -110,27 +112,27 @@
 			return eTop < this.winH && eTop + eHeight >= 0 && eLeft < this.winW && eLeft + eWidth >= 0;
 		},
 		//需要执行的懒加载
-		onread: function(_this){
-			var isload = false, remove = false;
+		onread: function(){
+			var _this = this;
 			for(var i = 0; i < _this.length; i++){
 				if(_this.isVisible(_this.eles[i])){
 					_this.lazyload(_this.eles[i], _this);
-					isload = true;
+					_this.isload = true;
 				}
 			}
-			if(isload){
+			if(_this.isload){
 				if(_this.mix){
 					_this.eles = document.querySelectorAll(_this.container+' *['+_this.src+']');
 				}else{
 					_this.eles = document.querySelectorAll(_this.container+' '+ _this.tag+'['+_this.src+']');
 				}
 				_this.length = _this.eles.length;
-				isload = false;
+				_this.isload = false;
 			}
 			//没有需要懒加载的图片则移除事件绑定
-			if(_this.length <= 0 && !remove){
-				_this.removeEvents(_this);
-				remove = true;
+			if(_this.length <= 0 && !_this.remove){
+				_this.removeEvents();
+				_this.remove = true;
 			}
 		},
 		attrSrc: function(ele, url){
@@ -247,16 +249,14 @@
 			img.src = src;
 		},
 		//绑定事件
-		addEvents: function(_this){
-			window.addEventListener('scroll', function(){
-				_this.onread(_this);
-			}, false);
+		addEvents: function(){
+			this.bindread = this.onread.bind(this);
+			window.addEventListener('scroll', this.bindread, false);
+
 		},
 		//移除事件绑定
-		removeEvents: function(_this){
-			window.removeEventListener('scroll', function(){
-				_this.onread(_this);
-			}, false);
+		removeEvents: function(){
+			window.removeEventListener('scroll', this.bindread, false);
 		}
 	}
 

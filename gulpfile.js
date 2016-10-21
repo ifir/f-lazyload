@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 	browserSync = require('browser-sync').create(),
 	reload = browserSync.reload;
 
-var jsPath = './src/*.js';
+var jsPath = './src/*.js',
 	htmlPath = './test/*.html';
 
 //gulp dev
