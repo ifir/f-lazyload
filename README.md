@@ -1,4 +1,4 @@
-# f-lazyload v0.1.0
+# f-lazyload v0.1.1
 原生无依赖，懒加载插件(完善ing...)
 兼容IE8(不包括IE8)以上
 
