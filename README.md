@@ -1,4 +1,4 @@
-# f-lazyload v0.1.1
+# f-lazyload v0.1.2
 原生无依赖，懒加载插件(完善ing...)
 兼容IE8(不包括IE8)以上
 
@@ -33,7 +33,7 @@
 ```
 <script src="youpath/f-lazload.js"></script>
 <script>
-	var Flazyload = new Flazyload({
+	var lazyload = new Flazyload({
 		container: String, //指定父容器 默认body,例如:'.class' or '#id' or 'tag'
 		src:String, // 自定义需要懒加载图片的标识,默认'data-src',格式为data-*
 		srcset:String, // 自定义srcset图片的标识,默认'data-srcset',格式为data-*
