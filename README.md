@@ -38,7 +38,7 @@
 		src:String, // 自定义需要懒加载图片的标识,默认'data-src',格式为data-*
 		srcset:String, // 自定义srcset图片的标识,默认'data-srcset',格式为data-*
 		fadeIn: Number, //默认不开启动画, 数值为毫秒
-		proload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
+		preload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
 		loadimg: String, //加载中图片 默认无图片
 		errimg: String, //加载失败图片 默认无图片
 		winH: Number, //指定可视区域大小,默认window.innerHeight
@@ -74,7 +74,7 @@ var lazyload = new Flazyload({
 	src:String, // 自定义需要懒加载图片的标识,默认'data-src',格式为data-*
 	srcset:String, // 自定义srcset图片的标识,默认'data-srcset',格式为data-*
 	fadeIn: Number, //默认不开启动画, 数值为毫秒
-	proload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
+	preload: Boolean, //首次进入页面后是否加载当前页面的图片,默认为true
 	loadimg: String, //加载中图片 默认无图片
 	errimg: String, //加载失败图片 默认无图片
 	winH: Number, //指定可视区域大小,默认window.innerHeight
