@@ -31,7 +31,7 @@
 
 1、页面引入
 ```
-<script src="youpath/f-lazload.js"></script>
+<script src="youpath/f-lazyload.js"></script>
 <script>
 	var lazyload = new Flazyload({
 		container: String, //指定父容器 默认body,例如:'.class' or '#id' or 'tag'
